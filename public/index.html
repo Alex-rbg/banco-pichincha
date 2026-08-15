@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Banca Web</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #FFD500;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI0ZGRDUwMCIvPjxyZWN0IHg9IjE1MCIgeT0iMjAwIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjEwIiBmaWxsPSIjMDAyODU1IiBvcGFjaXR5PSIwLjEiLz48cmVjdCB4PSIxNzAiIHk9IjIyMCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjRkZENTAwIiBvcGFjaXR5PSIwLjEiLz48dGV4dCB4PSIzMDAiIHk9IjI4MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjcyIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iIzAwMjg1NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgb3BhY2l0eT0iMC4wOCI+QkFOQ08gUElDSElOQ0hBPC90ZXh0Pjwvc3ZnPg==');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .warning-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #002855;
+            color: #FFD500;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            margin-top: 80px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: #FFD500;
+            position: relative;
+            border-radius: 0 0 0 12px;
+            flex-shrink: 0;
+        }
+        
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            top: 18px;
+            right: 12px;
+            width: 28px;
+            height: 30px;
+            background: #003B71;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 40% 100%, 40% 40%, 0 40%);
+        }
+        
+        .logo-text {
+            text-align: left;
+        }
+        
+        .logo-text h1 {
+            color: #002855;
+            font-size: 32px;
+            margin-bottom: 5px;
+            margin-top: 0;
+            font-weight: bold;
+        }
+        
+        .logo-text p {
+            color: #999;
+            font-size: 16px;
+            margin: 0;
+            font-weight: 300;
+        }
+        
+        .alert {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        .alert strong {
+            display: block;
+            color: #856404;
+            margin-bottom: 5px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #FFD500;
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #002855;
+            color: #FFD500;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 40, 85, 0.4);
+            background: #003a70;
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            background: #f5f5f5;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background: #002855;
+            color: #FFD500;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px;
+                margin-top: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="warning-banner">
+        ⚠️ Banco Pichincha - En Confianza - SIMULADOR PARA PRUEBAS - NO INGRESAR DATOS REALES
+    </div>
+    
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon"></div>
+            <div class="logo-text">
+                <h1>Banco Pichincha</h1>
+                <p>En Confianza</p>
+            </div>
+        </div>
+        
+        <div class="alert">
+            <strong>⚠️ Aviso Importante:</strong>
+            Este es un simulador para pruebas y capacitación. No pertenece a ningún banco. 
+            No ingrese datos personales, bancarios ni financieros reales. Toda la información es ficticia.
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('login')">Iniciar Sesión</div>
+            <div class="tab" onclick="showTab('registro')">Registrarse</div>
+        </div>
+        
+        <div id="login" class="tab-content active">
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <input type="text" id="loginUsuario" required placeholder="Ingresa tu usuario">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="loginPassword" required placeholder="Ingresa tu contraseña">
+                </div>
+                <button type="submit">Iniciar Sesión</button>
+            </form>
+            <div id="loginMessage"></div>
+        </div>
+        
+        <div id="registro" class="tab-content">
+            <form id="registroForm">
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" id="regNombre" required placeholder="Nombre ficticio">
+                </div>
+                <div class="form-group">
+                    <label>Apellido</label>
+                    <input type="text" id="regApellido" required placeholder="Apellido ficticio">
+                </div>
+                <div class="form-group">
+                    <label>ID de Discord o Usuario</label>
+                    <input type="text" id="regDiscord" required placeholder="usuario#1234 o ID de Discord">
+                </div>
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <input type="text" id="regUsuario" required placeholder="Crea un usuario (mín. 4 caracteres)">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="regPassword" required placeholder="Mín. 6 caracteres">
+                </div>
+                <button type="submit">Crear Cuenta</button>
+            </form>
+            <div id="registroMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3001/api';
+        
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+        
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageDiv = document.getElementById('loginMessage');
+            messageDiv.innerHTML = '';
+            
+            const usuario = document.getElementById('loginUsuario').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('usuario', JSON.stringify(data.usuario));
+                    messageDiv.innerHTML = `<div class="success">✅ Bienvenido ${data.usuario.nombre}!</div>`;
+                    
+                    setTimeout(() => {
+                        if (data.usuario.rol === 'administrador') {
+                            window.location.href = 'dashboard-admin.html';
+                        } else {
+                            window.location.href = 'dashboard.html';
+                        }
+                    }, 1000);
+                } else {
+                    messageDiv.innerHTML = `<div class="error">${data.error}</div>`;
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `<div class="error">Error de conexión</div>`;
+            }
+        });
+        
+        // Registro
+        document.getElementById('registroForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageDiv = document.getElementById('registroMessage');
+            messageDiv.innerHTML = '';
+            
+            const datos = {
+                nombre: document.getElementById('regNombre').value,
+                apellido: document.getElementById('regApellido').value,
+                discord: document.getElementById('regDiscord').value,
+                usuario: document.getElementById('regUsuario').value,
+                password: document.getElementById('regPassword').value
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/registro`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datos)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    messageDiv.innerHTML = `
+                        <div class="success">
+                            ✅ Cuenta creada exitosamente!<br>
+                            <strong>Cédula Ficticia:</strong> ${data.cedula}<br>
+                            <strong>Número de Cliente:</strong> ${data.numeroCliente}<br>
+                            <strong>Número de Cuenta:</strong> ${data.numeroCuenta}<br>
+                            <strong>Saldo Inicial:</strong> $${data.saldoInicial}
+                        </div>
+                    `;
+                    document.getElementById('registroForm').reset();
+                    setTimeout(() => showTab('login'), 3000);
+                } else {
+                    const errorMsg = data.errors ? data.errors.map(e => e.msg).join('<br>') : data.error;
+                    messageDiv.innerHTML = `<div class="error">${errorMsg}</div>`;
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `<div class="error">Error de conexión</div>`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "nombre": "Admin",
+      "apellido": "Sistema",
+      "cedula": "9999999999",
+      "email": "admin@discord",
+      "usuario": "admin",
+      "password": "$2a$10$7nGUgLNw8ok/tYO7MPPZneuitrsQUfwH7JM5iaFl./UnkB869IjH6",
+      "rol": "administrador",
+      "numero_cliente": "CLI-ADMIN001",
+      "numero_cuenta": "1000000000001",
+      "saldo_disponible": 10000,
+      "saldo_contable": 10000,
+      "estado": "activo",
+      "created_at": "2026-08-05T19:15:28.715Z"
+    }
+  ],
+  "tarjetas": [],
+  "movimientos": []
+}

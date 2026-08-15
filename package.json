@@ -1,0 +1,27 @@
+{
+  "name": "simulador-banco-web",
+  "version": "1.0.0",
+  "description": "Simulador de Banca Web para pruebas y capacitación",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "init-db": "node scripts/initDb.js",
+    "test-db": "node scripts/test-connection.js",
+    "build": "echo 'Build complete'"
+  },
+  "keywords": ["banco", "simulador", "educativo"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "dotenv": "^16.4.1",
+    "cors": "^2.8.5",
+    "express-validator": "^7.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
